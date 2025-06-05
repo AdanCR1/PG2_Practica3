@@ -1,74 +1,47 @@
 from django.db import models
-from django.contrib.auth.models import User
 
-class Usuario(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    edad = models.IntegerField()
-    peso = models.FloatField()
-    altura = models.FloatField()
-    objetivo = models.ForeignKey('Objetivo', on_delete=models.SET_NULL, null=True, blank=True)
-    plan_alimentacion = models.ForeignKey('PlanAlimentacion', on_delete=models.SET_NULL, null=True, blank=True)
-
-    def __str__(self):
-        return self.user.username
-
-class Categoria(models.Model):
+class Objetivo(models.Model): 
     nombre = models.CharField(max_length=100)
+    descripcion = models.TextField(null=True, blank=True)
 
-    def __str__(self):
-        return self.nombre
+def __str__(self):
+    return self.nombre
 
-class Ejercicio(models.Model):
-    LEVEL_CHOICES = [
-        ('principiante', 'Principiante'),
-        ('intermedio', 'Intermedio'),
-        ('avanzado', 'Avanzado'),
-    ]
+class PesoIdeal(models.Model): 
+    peso = models.DecimalField(max_digits=5, decimal_places=2)
+    estatura = models.DecimalField(max_digits=4, decimal_places=2)
+    edad = models.PositiveIntegerField()
+    fotos = models.ImageField(upload_to='fotos/', blank=True, null=True)
+    horas_sueno = models.DecimalField(max_digits=3, decimal_places=1)
+    dieta = models.TextField()
 
-    nombre = models.CharField(max_length=100)
-    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, related_name="ejercicios")
-    grupo_muscular = models.CharField(max_length=50)
-    nivel = models.CharField(max_length=20, choices=LEVEL_CHOICES)
-    duracion = models.IntegerField(help_text="Duración en segundos")
-    tipo = models.CharField(max_length=30)
-    instrucciones = models.TextField()
-    video_url = models.URLField(blank=True, null=True)
+def __str__(self):
+    return f"{self.peso}kg - {self.estatura}cm"
 
-    def __str__(self):
-        return self.nombre
+class PlanAlimentacion(models.Model): 
+    objetivo = models.ForeignKey(Objetivo, on_delete=models.CASCADE, related_name='planes', null=True, blank=True)
+    calorias_dia = models.PositiveIntegerField(null=True, blank=True)
+    proteinas_dia = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
 
-class Rutina(models.Model):
-    nombre = models.CharField(max_length=100)
-    ejercicios = models.ManyToManyField(Ejercicio)
-    duracion_total = models.IntegerField(help_text="Duración total en minutos", null=True, blank=True)
-    objetivo = models.ForeignKey('Objetivo', on_delete=models.SET_NULL, null=True, blank=True)
+def __str__(self):
+    return f"{self.objetivo.nombre} - {self.calorias_dia} cal"
 
-    def __str__(self):
-        return self.nombre
+class Ejercicio(models.Model): 
+    grupo_muscular = models.CharField(max_length=100)
+    usa_mancuernas = models.BooleanField(null=True, blank=True)
+    duracion = models.PositiveIntegerField(help_text="Duración en minutos", default=30)
+    gif = models.ImageField(upload_to='ejercicios/', blank=True, null=True)
+    descripcion = models.TextField(null=True, blank=True)
 
-class Objetivo(models.Model):
-    nombre = models.CharField(max_length=100)  # Ejemplo: "Perder peso", "Ganar peso", etc.
-    nivel = models.CharField(max_length=50, choices=[
-        ("saludable", "Saludable"),
-        ("adelgazamiento", "Adelgazamiento"),
-        ("fuerza", "Fuerza"),
-        ("resistencia", "Resistencia"),
-        ("hipertrofia", "Hipertrofia"),
-        ("aumento_masa", "Aumento de masa muscular"),
-        ("estético", "Estético"),
-        ("culturismo", "Culturismo"),
-    ])
-    descripcion = models.TextField(blank=True)
+def __str__(self):
+    return self.grupo_muscular
 
-    def __str__(self):
-        return f"{self.nombre} - {self.nivel}"
+class Rutina(models.Model): 
+    objetivo = models.ForeignKey(Objetivo, on_delete=models.CASCADE, related_name='rutinas', null=True, blank=True)
+    veces_entrenar_dia = models.PositiveIntegerField(null=True, blank=True)
+    veces_entrenar_semana = models.PositiveIntegerField(null=True, blank=True)
+    comidas_dia = models.PositiveIntegerField(null=True, blank=True)
+    tipo_entrenamiento = models.CharField(max_length=100, null=True, blank=True)
 
-class PlanAlimentacion(models.Model):
-    nombre = models.CharField(max_length=100)
-    objetivo = models.ForeignKey(Objetivo, on_delete=models.SET_NULL, null=True)
-    descripcion = models.TextField()
-    calorias_dia = models.IntegerField()
-    duracion_dias = models.IntegerField()
-
-    def __str__(self):
-        return f"{self.nombre} - {self.objetivo.nombre}"
+def __str__(self):
+    return f"Rutina de {self.objetivo.nombre}"
