@@ -115,6 +115,7 @@ GET /api/objetivos/
         "descripcion": "Objetivo para perder peso de forma saludable."
     }
 ]
+```
 
 POST /api/objetivos/
 ```json
@@ -142,6 +143,7 @@ GET /api/pesoidealHombre/
         "dieta": "Dieta balanceada con énfasis en proteínas."
     }
 ]
+```
 
 POST /api/pesoideal/
 ```json
@@ -173,6 +175,7 @@ GET /api/pesoidealMujer/
         "dieta": "Dieta balanceada con énfasis en hierro."
     }
 ]
+```
 
 POST /api/pesoidealMujer/
 ```json
@@ -201,6 +204,7 @@ GET /api/planes/
         "proteinas_dia": 150.0,
     }
 ]
+```
 
 POST /api/planes/
 ```json
@@ -226,6 +230,7 @@ GET /api/ejercicios/
         "peso_ideal": 70.0,
     }
 ]
+```
     
 POST /api/ejercicios/
 ```json
@@ -254,6 +259,7 @@ GET /api/rutinas/
         "objetivo": 1,
     }
 ]
+```
 
 POST /api/rutinas/
 ```json
@@ -282,6 +288,7 @@ GET /api/alimentos/
         "nota": "Ideal para dietas altas en proteínas."
     }
 ]
+```
 
 POST /api/alimentos/
 ```json
@@ -310,6 +317,7 @@ GET /api/detalleplan/
         "alimento": "Huevos revueltos"
     }
 ]
+```
 
 POST /api/detalleplan/
 ```json
